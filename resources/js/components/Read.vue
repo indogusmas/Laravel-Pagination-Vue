@@ -17,18 +17,23 @@
           <thead>
             <tr>
               <th width="50" class="text-center">No</th>
-              <th>Person</th>
-              <th width="200" class="text-center">Action</th>
+              <th>FirstName</th>
+              <th>LastName</th>
+              <th class="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(person, index) in persons.data" :key="person.id">
               <td width="50" class="text-center">{{ index + 1 }}</td>
               <td>{{ person.first_name }}</td>
+              <td>{{ person.last_name }}</td>
               <td width="200" class="text-center">
-                <div class="btn-group">
-                  <button class="btn btn-danger">Delete</button>
-                </div>
+                <router-link :to="{name: 'editPerson',params:{idPerson:person.id}}" class="btn btn-link">Edit</router-link>|
+                <a
+                  href="#"
+                  class="btn btn-link"
+                  v-on:click="deletePerson(person.id, index,person.first_name)"
+                >Delete</a>
               </td>
             </tr>
           </tbody>
@@ -63,6 +68,25 @@ export default {
           this.persons = data;
           console.log(this.persons.data);
         });
+    },
+    deletePerson(id, index, name) {
+      this.$swal({
+        title: "Yakin menghapus person " + name + "?",
+        icon: "warning",
+        button: true,
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Yes!",
+      }).then((result)=>{
+        if(result.value){
+          let endPoint = 'api/person/'+ id;
+          axios.delete(endPoint)
+          .then(response => {
+            this.$swal(response.data.message);
+            this.loadData();
+          })
+        }
+      })
     },
   },
 };

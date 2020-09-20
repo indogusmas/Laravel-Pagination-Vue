@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Person;
+use Response;
 
 class PersonController extends Controller
 {
     public function all()
     {
-        $person = Person::orderBy('id', 'asc')->paginate(4);
+        $person = Person::orderBy('id', 'desc')->paginate(4);
         return \response()->json($person);
     }
 
@@ -23,7 +24,20 @@ class PersonController extends Controller
     // menambah data
     public function store(Request $request)
     {
-        return Person::create($request->all());
+        try{
+            Person::create($request->all());
+            $response = array(
+                'status'=> '100',
+                'message'=> 'Succes  Add Employee'
+            );
+            return Response::json($response);
+        }catch(Exception $e){
+            $response = array(
+                'status'=> 404,
+                'message' => $e->getMessage()
+            );
+            return Response::json($response);
+        }
     }
 
     // mengubah data
@@ -31,7 +45,11 @@ class PersonController extends Controller
     {
         $person = Person::find($id);
         $person->update($request->all());
-        return $person;
+        $response = array(
+            'status'=> '100',
+            'message'=> 'Succes  Update Person'
+        );
+        return Response::json($response);
     }
 
     // menghapus data
@@ -39,6 +57,11 @@ class PersonController extends Controller
     {
         $person = Person::find($id);
         $person->delete();
-        return 204;
+        $response = array(
+            'status'=> '100',
+            'message'=> 'Succes  delete Person'
+        );
+        return Response::json($response);
+
     }
 }

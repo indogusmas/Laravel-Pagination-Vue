@@ -6,8 +6,10 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router';
 import VueAxios from 'vue-axios';
 import Axios from 'axios';
+import VueSweetalert2 from 'vue-sweetalert2'
 
 
+Vue.use(VueSweetalert2);
 Vue.use(VueRouter,VueAxios,Axios);
 Vue.component('pagination', require('laravel-vue-pagination'));
 
@@ -20,7 +22,7 @@ import Update from './components/Update.vue';
 // membuat router
 const routes = [
     {
-        name: 'read',
+        name: 'home',
         path: '/',
         component: Read
     },
@@ -30,8 +32,8 @@ const routes = [
         component: Create
     },
     {
-        name: 'update',
-        path: '/detail/:id',
+        name: 'editPerson',
+        path: '/editPerson',
         component: Update
     }
 ]
